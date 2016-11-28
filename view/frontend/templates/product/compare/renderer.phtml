@@ -1,0 +1,5 @@
+<script>
+    require(["jquery", "Dmatthew_AjaxCompare/js/compare-renderer"], function ($) {
+        $('.compare-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>').CompareRenderer();
+    });
+</script>

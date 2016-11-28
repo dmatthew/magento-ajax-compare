@@ -1,0 +1,15 @@
+<?php /** @var $block \Dmatthew\AjaxCompare\Block\Product\ProductList\Item\AddTo\Compare */ ?>
+<!--<input type="checkbox" class="compare---><?php ///* @escapeNotVerified */ echo $block->getProduct()->getId() ?><!--" />-->
+
+<?php
+$helper = $block->getCompareHelper();
+?>
+<a
+   class="action tocompare"
+   title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+   aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+   data-compare='<?php /* @escapeNotVerified */ echo $helper->sayHello(); ?>'
+   <?php if ($block->isChecked()) : ?> style="color: red;"<?php endif; ?>
+   role="button">
+    <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
+</a>
