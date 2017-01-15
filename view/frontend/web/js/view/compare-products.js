@@ -16,7 +16,8 @@ define([
         options: {
             classes: {
                 addToCompareClass: 'tocompare'
-            }
+            },
+            formKeyInputSelector: 'input[name="form_key"]'
         },
 
         initialize: function () {
@@ -74,12 +75,21 @@ define([
             this.compareProducts.valueHasMutated(); // HACK: Does not update view if called from within jQuery.on(), so this is needed for some reason.
 
             var addData = JSON.parse(item.add_data);
+            // TODO: Add form key to data.
+            var formKey = $(this.options.formKeyInputSelector).val();
+            if (formKey) {
+                addData.data.form_key = formKey;
+            }
             $.ajax({
                 url: addData.action,
                 type: 'POST',
                 data: addData.data,
                 success: function (data, testStatus, jqXHR) {
                     alert('Success');
+                    // TODO: Check for data.success === true to determine if it was an actual success.
+                    if (data.success == false) {
+                        alert('actually false');
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('failure');
