@@ -5,10 +5,10 @@
 $helper = $block->getCompareHelper();
 ?>
 <a
-   class="action tocompare"
+   class="action tocompare compare-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"
    title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
    aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-   data-compare='<?php /* @escapeNotVerified */ echo $helper->sayHello(); ?>'
+   data-compare='<?php /* @escapeNotVerified */ echo $helper->getCompareData($block->getProduct()); ?>'
    <?php if ($block->isChecked()) : ?> style="color: red;"<?php endif; ?>
    role="button">
     <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
