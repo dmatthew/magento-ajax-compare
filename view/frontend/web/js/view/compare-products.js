@@ -42,15 +42,15 @@ define([
                 var element = $(this);
                 var found = $.map($widget.compareProducts().items, function (item) {
                     if (item.id == element.data('compare').id) {
-                        return true;
+                        return item.id;
                     }
                 });
-                if (found) {
+                if ($.isEmptyObject(found)) {
                     $widget._addItem({
-                        'id': '1',
-                        'product_url': 'www.google.com',
+                        'id': $(this).data('compare').id,
+                        'product_url': $(this).data('compare').product_url,
                         'name': $(this).data('compare').name,
-                        'remove_url': 'maps.google.com'
+                        'remove_url': $(this).data('compare').remove_url
                     });
                 }
             });
