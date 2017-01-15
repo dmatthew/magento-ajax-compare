@@ -57,8 +57,56 @@ class Data extends \Magento\Catalog\Helper\Product\Compare
             'id' => $product->getId(),
             'name' => $product->getName(),
             'product_url' => $product->getUrlModel()->getUrl($product),
-            'removeUrl' => $this->getRemoveUrl()
+            'remove_data' => $this->getAjaxPostDataRemove($product),
+            'add_data'    => $this->getAjaxPostDataParams($product)
         ];
         return $this->_jsonEncoder->encode($config);
+    }
+
+    /**
+     * Get parameters used to add product to compare list urls by ajax call.
+     *
+     * @param Product $product
+     * @return string
+     */
+    public function getAjaxPostDataParams($product)
+    {
+        return $this->postHelper->getPostData($this->getAjaxAddUrl(), ['product' => $product->getId()]);
+    }
+
+    /**
+     * Retrieve url for adding product to compare list by ajax call.
+     *
+     * @return string
+     */
+    public function getAjaxAddUrl()
+    {
+        return $this->_getUrl('catalog/product_compare/ajaxAdd');
+    }
+
+    /**
+     * Get parameters to remove a product from the compare list by ajax call.
+     *
+     * @param Product $product
+     * @return string
+     */
+    public function getAjaxPostDataRemove($product)
+    {
+        $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
+        $data = [
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $listCleanUrl,
+            'product' => $product->getId()
+        ];
+        return $this->postHelper->getPostData($this->getAjaxRemoveUrl(), $data);
+    }
+
+    /**
+     * Retrieve url for removing product from compare list by ajax call.
+     *
+     * @return string
+     */
+    public function getAjaxRemoveUrl()
+    {
+        return $this->_getUrl('catalog/product_compare/ajaxRemove');
     }
 }

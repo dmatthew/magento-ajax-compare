@@ -51,7 +51,8 @@ define([
                         'id': $(this).data('compare').id,
                         'product_url': $(this).data('compare').product_url,
                         'name': $(this).data('compare').name,
-                        'remove_url': $(this).data('compare').remove_url
+                        'remove_data': $(this).data('compare').remove_data,
+                        'add_data': $(this).data('compare').add_data
                     });
                 }
             });
@@ -70,7 +71,20 @@ define([
             this.compareProducts().items.push(item);
             this.compareProducts().count++;
             this.compareProducts().countCaption = this.compareProducts().count == 1 ? this.compareProducts().count + ' Item' : this.compareProducts().count + ' Items';
-            this.compareProducts.valueHasMutated(); // Does not update view if called from within jQuery.on(), so this is needed for some reason.
+            this.compareProducts.valueHasMutated(); // HACK: Does not update view if called from within jQuery.on(), so this is needed for some reason.
+
+            var addData = JSON.parse(item.add_data);
+            $.ajax({
+                url: addData.action,
+                type: 'POST',
+                data: addData.data,
+                success: function (data, testStatus, jqXHR) {
+                    alert('Success');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('failure');
+                }
+            })
         }
     });
 });
