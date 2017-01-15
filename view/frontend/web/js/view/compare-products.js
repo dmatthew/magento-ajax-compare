@@ -36,16 +36,17 @@ define([
             }
             sidebarInitialized = true;
 
+            this._setupChangeEvents();
+        },
+
+        _setupChangeEvents: function () {
+
             var $widget = this;
 
             $('.' + this.options.classes.addToCompareClass).on('click', function () {
                 var element = $(this);
-                var found = $.map($widget.compareProducts().items, function (item) {
-                    if (item.id == element.data('compare').id) {
-                        return item.id;
-                    }
-                });
-                if ($.isEmptyObject(found)) {
+                var found = $widget._itemExists(element.data('compare'));
+                if (found) {
                     $widget._addItem({
                         'id': $(this).data('compare').id,
                         'product_url': $(this).data('compare').product_url,
@@ -54,6 +55,15 @@ define([
                     });
                 }
             });
+        },
+
+        _itemExists: function (compare) {
+            var found = $.map(this.compareProducts().items, function (item) {
+                if (item.id == compare.id) {
+                    return item.id;
+                }
+            });
+            return $.isEmptyObject(found);
         },
 
         _addItem: function (item) {
