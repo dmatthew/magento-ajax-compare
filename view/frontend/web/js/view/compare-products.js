@@ -47,7 +47,7 @@ define([
             $('.' + this.options.classes.addToCompareClass).on('click', function () {
                 var element = $(this);
                 var found = $widget._itemExists(element.data('compare'));
-                if (found) {
+                if (!found) {
                     $widget._addItem({
                         'id': $(this).data('compare').id,
                         'product_url': $(this).data('compare').product_url,
@@ -60,12 +60,13 @@ define([
         },
 
         _itemExists: function (compare) {
+            if (!this.compareProducts().items) return false;
             var found = $.map(this.compareProducts().items, function (item) {
                 if (item.id == compare.id) {
                     return item.id;
                 }
             });
-            return $.isEmptyObject(found);
+            return !$.isEmptyObject(found);
         },
 
         _addItem: function (item) {
@@ -75,7 +76,6 @@ define([
             this.compareProducts.valueHasMutated(); // HACK: Does not update view if called from within jQuery.on(), so this is needed for some reason.
 
             var addData = JSON.parse(item.add_data);
-            // TODO: Add form key to data.
             var formKey = $(this.options.formKeyInputSelector).val();
             if (formKey) {
                 addData.data.form_key = formKey;
@@ -97,4 +97,10 @@ define([
             })
         }
     });
+    /**
+     * NOTES
+     * 1. private_content_version cookie does not get set until you make a post request and update something that needs 
+     *    to be unique to a customer, like a compare products list.
+     * 2. to set this.compareProducts, you can use this.compareProducts(data).
+     */
 });

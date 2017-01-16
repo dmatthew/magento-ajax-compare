@@ -6,6 +6,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
 use \Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class AjaxAdd extends \Magento\Catalog\Controller\Product\Compare
 {
@@ -50,6 +51,8 @@ class AjaxAdd extends \Magento\Catalog\Controller\Product\Compare
 
         $result = [];
 
+        // TODO: Validate this is a POST request.
+        
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             $result = [
                 'success' => false,
@@ -57,6 +60,23 @@ class AjaxAdd extends \Magento\Catalog\Controller\Product\Compare
                 'error_message' => __('Invalid Form Key. Please refresh the page.')
             ];
             return $resultJson->setData($result);
+        }
+
+        $productId = (int)$this->getRequest()->getParam('product');
+        if ($productId && ($this->_customerVisitor->getId() || $this->_customerSession->isLoggedIn())) {
+            $storeId = $this->_storeManager->getStore()->getId();
+            try {
+                $product = $this->productRepository->getById($productId, false, $storeId);
+            } catch (NoSuchEntityException $e) {
+                $product = null;
+            }
+
+            if ($product) {
+                $this->_catalogProductCompareList->addProduct($product);
+                $this->_eventManager->dispatch('catalog_product_compare_add_product', ['product' => $product]);
+            }
+
+            $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
         }
 
         return $resultJson->setData($result);
