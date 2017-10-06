@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Remove core block and insert my own block. -->
+        <referenceContainer name="content">
+            <!--<block class="Dmatthew\AjaxCompare\Block\Renderer" name="dmatthew.compare.renderer" template="Dmatthew_AjaxCompare::product/compare/renderer.phtml" />-->
+
+            <!--<referenceBlock name="category.product.addto">-->
+                <!--<block class="Dmatthew\AjaxCompare\Block\Product\ProductList\Item\AddTo\Compare"-->
+                       <!--name="dmatthew.category.product.addto.compare" as="dmatthew.compare"-->
+                       <!--template="Dmatthew_AjaxCompare::product/list/addto/compare.phtml"/>-->
+            <!--</referenceBlock>-->
+            <!--<referenceBlock name="category.product.addto.compare" remove="true" />-->
+
+
+            <!-- OR, just change core block's template and class -->
+            <referenceBlock name="category.product.addto.compare"
+                            class="Dmatthew\AjaxCompare\Block\Product\ProductList\Item\AddTo\Compare"
+                            template="Dmatthew_AjaxCompare::product/list/addto/compare.phtml" />
+
+
+            <!-- OR, just change the core block's template argument -->
+            <!--<referenceBlock name="category.product.addto.compare">
+                <arguments>
+                    <argument name="class" xsi:type="string">Dmatthew\AjaxCompare\Block\Product\ProductList\Item\AddTo\Compare</argument>
+                    <argument name="template" xsi:type="string">Dmatthew_AjaxCompare::product/list/addto/compare.phtml</argument>
+                </arguments>
+            </referenceBlock>-->
+        </referenceContainer>
+    </body>
+</page>
